@@ -1,0 +1,50 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}:${_TAG}', '-f', 'scrapper/Dockerfile', '.']
+
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}:${_TAG}']
+
+  # Deploy to Cloud Run Jobs
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'jobs'
+      - 'create'
+      - '${_JOB_NAME}'
+      - '--image'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}:${_TAG}'
+      - '--region'
+      - '${_REGION}'
+      - '--tasks'
+      - '1'
+      - '--max-retries'
+      - '3'
+      - '--task-timeout'
+      - '3600s'
+      - '--set-env-vars'
+      - 'PYTHONUNBUFFERED=1'
+
+  # Execute the job immediately after deployment
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'jobs'
+      - 'execute'
+      - '${_JOB_NAME}'
+      - '--region'
+      - '${_REGION}'
+
+substitutions:
+  _REGION: us-central1
+  _REPOSITORY: scrapper-repo
+  _IMAGE: yogonet-scrapper
+  _TAG: latest
+  _JOB_NAME: yogonet-scrapper-job
+
+options:
+  logging: CLOUD_LOGGING_ONLY

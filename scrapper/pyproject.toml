@@ -1,0 +1,22 @@
+[project]
+name = "scrapper"
+version = "0.1.0"
+description = "Scrapper para obtener noticias de Yogonet"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.2.3",
+    "selenium>=4.27.1",
+    "google-cloud-bigquery>=3.27.0",
+    "webdriver-manager>=4.0.2",
+    "pyarrow>=18.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "ipykernel>=6.29.5",
+]
