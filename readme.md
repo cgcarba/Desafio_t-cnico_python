@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Instrucciones para Ejecutar el Script y Desplegarlo en Cloud Run
 
 Este README proporciona instrucciones detalladas para construir, subir y desplegar el script de web scraping en Cloud Run utilizando Cloud Build y un archivo `cloudbuild.yaml`.
@@ -212,5 +211,4 @@ Asegura estar logueado en gcloud correctamente para usarlo.
 
 
 ---
->>>>>>> 23d6e1571aa5e29d8ad79a997f1257680be32ac7
 Autor: Claudio Carballo
